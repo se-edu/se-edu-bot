@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "newLine": "LF",
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "outDir": "dist",
+        "plugins": [
+            {"name": "tslint-language-service"}
+        ],
+        "pretty": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "ES2017"
+    }
+}

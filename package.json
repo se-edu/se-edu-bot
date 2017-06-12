@@ -1,0 +1,32 @@
+{
+  "name": "se-edu-bot",
+  "description": "Helps out with SE-EDU tasks",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": ">=7.9.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "all": "npm-run-all",
+    "build": "tsc",
+    "postinstall": "npm run build",
+    "start": "node dist/server.js",
+    "watch:tsc": "tsc -w",
+    "watch:server": "nodemon --watch dist dist/server.js",
+    "watch": "npm-run-all --parallel \"watch:*\"",
+    "clean": "rimraf dist",
+    "lint": "tslint -p tsconfig.json --type-check"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.31",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
+    "rimraf": "^2.6.1",
+    "tslint": "^5.4.3",
+    "tslint-language-service": "^0.9.6",
+    "typescript": "^2.3.4"
+  }
+}

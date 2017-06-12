@@ -1,0 +1,124 @@
+= se-edu-bot
+:toc: preamble
+:toc-title:
+:sectnums:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+endif::[]
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+Helps out with managing SE-EDU projects.
+
+== Local development setup
+
+=== Prerequisites
+
+. Node `7.9.0` or later.
+. An editor with Typescript language service support is strongly recommended.
+  (e.g. https://code.visualstudio.com/[VS Code])
+. https://ngrok.com/[ngrok]
+
+=== Cloning the repo
+
+. Fork this repo, and clone the fork to your computer.
+. `cd` into the project directory.
+. Run `npm install` to install dependencies.
+
+=== Setting up ngrok
+
+We use https://ngrok.com/[ngrok] to expose our local server to the internet for Webhook testing.
+Run
+
+----
+ngrok http 5000
+----
+
+You should see a line like this:
+
+----
+Forwarding   https://abcdefg123.ngrok.io -> localhost:5000
+----
+
+This is your temporary ngrok URL which exposes your local server to the internet.
+It is valid until the `ngrok` process terminates.
+Take note of it, we'll use it in later steps.
+
+=== Building the project
+
+* Build the project once.
++
+[source,shell]
+----
+npm run build
+----
+
+* Do a clean build.
++
+[source,shell]
+----
+npm run all clean build
+----
+
+=== Running the server
+
+The project must be built first (`npm run build`).
+
+* Run the server
++
+[source,shell]
+----
+npm start
+----
+
+* Run the server and watch for changes,
+  incrementally rebuilding the project and restarting the server whenever source files change.
++
+[source,shell]
+----
+npm run watch
+----
+
+The server should be accessible via your ngrok address which you got in <<Setting up ngrok>>.
+
+=== Linting
+
+[source,shell]
+----
+npm run lint
+----
+
+=== Cleaning build products
+
+[source,shell]
+----
+npm run clean
+----
+
+== Deploying to Heroku
+
+This repository is setup to automatically deploy to Heroku whenever new commits are pushed to `master`.
+As such, there is no need for any manual deployment.
+
+Below is a guide for setting up the Heroku application from scratch should there be any need to (e.g. for testing).
+
+=== Setting up the Heroku application from scratch
+
+. Go to the https://dashboard.heroku.com[Heroku dashboard] and login.
+. `New` -> `Create new App`.
+. Enter the app name (i.e. `se-edu-bot`) and click `Create App`.
+. Under `Deployment method`, select `Github`.
+. If Heroku Dashboard does not have access to your GitHub account,
+  it will display a single `Connect to GitHub` button.
+  Click on it, and then authorize the Heroku Dashboard to access your GitHub account and `se-edu` organization.
+. Follow the instructions to connect the Heroku app to the `se-edu/se-edu-bot` repo.
+. Ensure the `Wait for CI to pass before deploy` checkbox is checked, and then click `Enable Automatic Deploys`.
+. Go to `Settings` -> `Config Variables`, and set `NPM_CONFIG_PRODUCTION` to `false`.
+
+== Coding standard
+
+We follow the oss-generic coding standard.
+
+== License
+
+MIT License

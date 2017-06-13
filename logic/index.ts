@@ -1,5 +1,5 @@
 import Logic from './Logic';
-import LogWebhookLogic from './LogWebhookLogic';
+import PraiseMergedPrLogic from './PraiseMergedPrLogic';
 import koaCompose = require('koa-compose');
 
 /**
@@ -14,7 +14,7 @@ export interface CreateLogicOptions {
 export function createLogic(options: CreateLogicOptions): Logic {
     const logics: Logic[] = [];
 
-    logics.push(new LogWebhookLogic());
+    logics.push(new PraiseMergedPrLogic());
 
     const webhookMiddleware = koaCompose(logics.map(logic => logic.webhookMiddleware.bind(logic)));
     return {

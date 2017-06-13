@@ -10,6 +10,10 @@ export default class BaseLogic implements Logic {
         // do nothing
     }
 
+    async onPullRequest(event: github.PullRequestEvent, ghInstallationApi: github.RequestApi): Promise<void> {
+        // do nothing
+    }
+
     async webhookMiddleware(ctx: Koa.Context, next?: () => Promise<void>): Promise<void> {
         const event = ctx.request.body;
         const ghInstallationApi = github.requireGhInstallationApi(ctx);
@@ -17,6 +21,9 @@ export default class BaseLogic implements Logic {
         switch (github.getEventName(ctx)) {
         case 'ping':
             this.onPing(event, ghInstallationApi).catch(onError);
+            break;
+        case 'pull_request':
+            this.onPullRequest(event, ghInstallationApi).catch(onError);
             break;
         default:
         }

@@ -1,6 +1,7 @@
 export {
     EventName,
     PingEvent,
+    PullRequestEvent,
     getEventName,
     isEventName,
 } from './events';

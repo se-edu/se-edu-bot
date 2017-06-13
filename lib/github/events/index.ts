@@ -6,7 +6,8 @@ import {
  * Webhook event name.
  */
 export const EventName = Enum(
-    'ping');
+    'ping',
+    'pull_request');
 export type EventName = Enum<typeof EventName>;
 
 /**
@@ -28,3 +29,4 @@ export function getEventName(ctx: { get(key: string): string | undefined }): Eve
 }
 
 export { PingEvent } from './PingEvent';
+export { PullRequestEvent } from './PullRequestEvent';

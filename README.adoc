@@ -212,6 +212,26 @@ as Heroku will automatically set the `PORT` environment variable.
 `GITHUB_WEBHOOK_SECRET`::
 (Required) The webhook secret of the GitHub App. (See <<Setting up a GitHub App>>)
 
+== Architecture
+
+`lib/`::
+    Utility libraries.
+    Try to avoid encoding policy within the code,
+    instead pass options to them via the entry point (`server.ts`).
+
+`logic/`::
+    Code controlling the behavior of the bot.
+
+=== `logic`
+
+The bot's behavior is split into multiple logic components,
+each doing one thing.
+Each logic component is implemented as an individual file within the `logic/` directory.
+
+All logic components implement the `Logic` interface.
+Most logic components also inherit from the `BaseLogic` class,
+which provides some useful base functionality such as splitting the `webhookMiddleware()` method into event-specific callback methods.
+
 == Coding standard
 
 We follow the oss-generic coding standard.

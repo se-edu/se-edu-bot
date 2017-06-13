@@ -9,6 +9,9 @@ import koaRoute = require('koa-route');
 import koaCompose = require('koa-compose');
 import koaBodyParser = require('koa-bodyparser');
 import * as github from './lib/github';
+import {
+    createLogic,
+} from './logic';
 
 /**
  * Server app configuration.
@@ -32,10 +35,14 @@ export function createApp(appConfig: AppConfig): Koa {
     const app = new Koa();
     app.proxy = appConfig.proxy;
 
+    const logic = createLogic({
+    });
+
     // GitHub webhook
     app.use(koaRoute.post('/webhook', koaCompose<Koa.Context>([
         koaBodyParser(),
         github.koaWebhookValidator(appConfig.githubWebhookSecret),
+        logic.webhookMiddleware,
     ])));
 
     app.use(koaRoute.get('/', async ctx => {

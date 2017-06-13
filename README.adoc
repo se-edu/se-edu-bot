@@ -129,6 +129,17 @@ Below is a guide for setting up the Heroku application from scratch should there
 
 == Environment variables
 
+`PROXY`::
+(Required) Set to `true` if se-edu-bot is served behind a reverse proxy (e.g. ngrok or heroku).
+Given that we host se-edu-bot on heroku and use ngrok for development,
+this should usually be set to `true`.
+
+`PORT`::
+TCP port which the server will listen on.
+There is no need to explicitly set this on Heroku,
+as Heroku will automatically set the `PORT` environment variable.
+(Default: 5000)
+
 == Coding standard
 
 We follow the oss-generic coding standard.

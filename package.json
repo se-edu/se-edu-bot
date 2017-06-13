@@ -18,7 +18,10 @@
     "watch:server": "nodemon --watch dist dist/server.js",
     "watch": "npm-run-all --parallel \"watch:*\"",
     "clean": "rimraf dist",
-    "lint": "tslint -p tsconfig.json --type-check"
+    "lint": "tslint -p tsconfig.json --type-check",
+    "test": "mocha --opts mocha.opts",
+    "test-watch:mocha": "mocha --opts mocha.opts -w",
+    "test-watch": "npm-run-all --parallel watch:tsc test-watch:mocha"
   },
   "dependencies": {
     "dotenv": "^4.0.0",
@@ -34,8 +37,11 @@
     "@types/koa": "^2.0.39",
     "@types/koa-compose": "^3.2.2",
     "@types/koa-route": "^3.2.0",
+    "@types/mocha": "^2.2.41",
     "@types/node": "^7.0.31",
     "@types/source-map-support": "^0.4.0",
+    "mocha": "^3.4.2",
+    "mocha-typescript": "^1.1.4",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
     "rimraf": "^2.6.1",

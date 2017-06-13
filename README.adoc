@@ -99,6 +99,25 @@ The server should be accessible via your ngrok address which you got in <<Settin
 npm run lint
 ----
 
+=== Running tests
+
+The project must be built first (`npm run build`).
+
+* Run tests once.
++
+[source,shell]
+----
+npm test
+----
+
+* Run tests and watch for changes,
+  incrementally rebuilding the project and re-running tests whenever source files change.
++
+[source,shell]
+----
+npm run test-watch
+----
+
 === Cleaning build products
 
 [source,shell]

@@ -3,4 +3,4 @@ language: node_js
 node_js:
     - "7"
 
-script: npm run all build lint
+script: npm run all build lint test

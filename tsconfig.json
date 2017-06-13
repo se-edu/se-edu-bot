@@ -1,11 +1,15 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "experimentalDecorators": true,
         "module": "commonjs",
         "newLine": "LF",
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "dist",
+        "paths": {
+            "*": ["types/*"]
+        },
         "plugins": [
             {"name": "tslint-language-service"}
         ],

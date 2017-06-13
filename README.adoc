@@ -257,6 +257,11 @@ All logic components implement the `Logic` interface.
 Most logic components also inherit from the `BaseLogic` class,
 which provides some useful base functionality such as splitting the `webhookMiddleware()` method into event-specific callback methods.
 
+== Logging
+
+To facilitate debugging problems in production,
+se-edu-bot exposes its logs via the `/logs` endpoint.
+
 == Coding standard
 
 We follow the oss-generic coding standard.

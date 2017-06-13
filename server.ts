@@ -9,9 +9,11 @@ import koaRoute = require('koa-route');
 import koaCompose = require('koa-compose');
 import koaBodyParser = require('koa-bodyparser');
 import * as github from './lib/github';
+import Logger from './lib/Logger';
 import {
     createLogic,
 } from './logic';
+import { logFileName } from './serverWithLogging';
 
 /**
  * Server app configuration.
@@ -70,6 +72,17 @@ export function createApp(appConfig: AppConfig): Koa {
             userAgent,
         }),
         logic.webhookMiddleware,
+    ])));
+
+    // Logs access
+    const logger = new Logger({
+        fileName: logFileName,
+    });
+    app.use(koaRoute.get('/logs', koaCompose<Koa.Context>([
+        async ctx => {
+            ctx.type = 'text';
+            ctx.body = logger.createReadableStream();
+        },
     ])));
 
     app.use(koaRoute.get('/', async ctx => {

@@ -44,6 +44,45 @@ This is your temporary ngrok URL which exposes your local server to the internet
 It is valid until the `ngrok` process terminates.
 Take note of it, we'll use it in later steps.
 
+=== Setting up a GitHub App
+
+. Go to your https://github.com/settings/apps[User Owned GitHub Apps] page and click on `Register a new GitHub App`.
+. Fill in the details as follows:
+  (replace `https://abc123.ngrok.io` with your temporary ngrok URL which you got in <<Setting up ngrok>>)
+
+    Github App Name::
+    Give a name to identify the bot (e.g. `se-edu-bot`)
+
+    Homepage URL::
+    The URL to your fork.
+
+    User authorization callback URL::
+    `https://abc123.ngrok.io/auth/login/callback`
+
+    Webhook URL::
+    `https://abc123.ngrok.io/webhook`
+
+    Webhook Secret::
+    Fill in a random string (preferably generated with a cryptographically secure random string generator).
+
+    Permissions::
+    Select the following, leaving the rest at their default:
+
+    * Issues: `Read & write`
+    ** Webhook events: `Issue comment`, `Issues`.
+    * Pull requests: `Read & write`
+    ** Webhook events: `Pull request`, `Pull request review`, `Pull request review comment`
+
+    Where can this app be installed?::
+    Ensure `Only on this account` is selected.
+
+. Click `Create GitHub App` to create your GitHub App.
+. You will then be taken to your GitHub App's page. Click on `Install`.
+. Select `All repositories` and then click `Install` to install your GitHub App on all your GitHub repositories.
+
+NOTE: Since your ngrok URL is temporary,
+you will need to reconfigure your GitHub App each time you get a new temporary URL.
+
 === Configuring environment variables
 
 Environment variables are used to configure the bot.
@@ -134,6 +173,7 @@ Below is a guide for setting up the Heroku application from scratch should there
 
 === Setting up the Heroku application from scratch
 
+.Part 1: Set up Heroku App
 . Go to the https://dashboard.heroku.com[Heroku dashboard] and login.
 . `New` -> `Create new App`.
 . Enter the app name (i.e. `se-edu-bot`) and click `Create App`.
@@ -143,6 +183,16 @@ Below is a guide for setting up the Heroku application from scratch should there
   Click on it, and then authorize the Heroku Dashboard to access your GitHub account and `se-edu` organization.
 . Follow the instructions to connect the Heroku app to the `se-edu/se-edu-bot` repo.
 . Ensure the `Wait for CI to pass before deploy` checkbox is checked, and then click `Enable Automatic Deploys`.
+
+.Part 2: Set up GitHub App
+. On GitHub, go to https://github.com/settings/profile[Your profile page] -> Organization Settings -> `se-edu`.
+. Click on `Github Apps`.
+. Click on `Register a new GitHub App`
+. Follow the same steps as <<Setting up a GitHub App>>,
+  except instead of using the `ngrok.io` hostname use the Heroku App's hostname (e.g. `https://se-edu-bot.herokuapp.com`)
+
+.Part 3: Continue setting up Heroku App
+. Go back to the https://dashboard.heroku.com[Heroku dashboard] and click on the `se-edu-bot` app to go to its page.
 . Go to `Settings` -> `Config Variables`, and set `NPM_CONFIG_PRODUCTION` to `false`.
 . Configure the rest of the <<Environment variables>>.
 
@@ -158,6 +208,9 @@ TCP port which the server will listen on.
 There is no need to explicitly set this on Heroku,
 as Heroku will automatically set the `PORT` environment variable.
 (Default: 5000)
+
+`GITHUB_WEBHOOK_SECRET`::
+(Required) The webhook secret of the GitHub App. (See <<Setting up a GitHub App>>)
 
 == Coding standard
 

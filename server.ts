@@ -6,6 +6,9 @@ dotenv.config();
 
 import Koa = require('koa');
 import koaRoute = require('koa-route');
+import koaCompose = require('koa-compose');
+import koaBodyParser = require('koa-bodyparser');
+import * as github from './lib/github';
 
 /**
  * Server app configuration.
@@ -15,6 +18,11 @@ export interface AppConfig {
      * True if the server is being served behind a proxy.
      */
     proxy: boolean;
+
+    /**
+     * GitHub webhook secret.
+     */
+    githubWebhookSecret: string;
 }
 
 /**
@@ -23,6 +31,12 @@ export interface AppConfig {
 export function createApp(appConfig: AppConfig): Koa {
     const app = new Koa();
     app.proxy = appConfig.proxy;
+
+    // GitHub webhook
+    app.use(koaRoute.post('/webhook', koaCompose<Koa.Context>([
+        koaBodyParser(),
+        github.koaWebhookValidator(appConfig.githubWebhookSecret),
+    ])));
 
     app.use(koaRoute.get('/', async ctx => {
         ctx.body = 'Hello world!';
@@ -36,6 +50,7 @@ export function createApp(appConfig: AppConfig): Koa {
  */
 function extractAppConfigFromEnv(): AppConfig {
     return {
+        githubWebhookSecret: extractEnvVar('GITHUB_WEBHOOK_SECRET'),
         proxy: !!extractEnvVar('PROXY', ''),
     };
 }

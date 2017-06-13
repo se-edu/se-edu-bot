@@ -44,6 +44,17 @@ This is your temporary ngrok URL which exposes your local server to the internet
 It is valid until the `ngrok` process terminates.
 Take note of it, we'll use it in later steps.
 
+=== Configuring environment variables
+
+Environment variables are used to configure the bot.
+See <<Environment variables>> for a full list of settings.
+
+For ease of development,
+se-edu-bot will automatically load environment variables defined in the `.env` file in the project root.
+
+This is done using https://github.com/motdotla/dotenv[dotenv].
+See the aforementioned link for information on the `.env` file format.
+
 === Building the project
 
 * Build the project once.
@@ -114,6 +125,9 @@ Below is a guide for setting up the Heroku application from scratch should there
 . Follow the instructions to connect the Heroku app to the `se-edu/se-edu-bot` repo.
 . Ensure the `Wait for CI to pass before deploy` checkbox is checked, and then click `Enable Automatic Deploys`.
 . Go to `Settings` -> `Config Variables`, and set `NPM_CONFIG_PRODUCTION` to `false`.
+. Configure the rest of the <<Environment variables>>.
+
+== Environment variables
 
 == Coding standard
 

@@ -2,3 +2,4 @@
 /npm-debug.log
 /se-edu-bot-*.tgz
 /dist/
+/.env

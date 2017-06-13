@@ -21,9 +21,11 @@
     "lint": "tslint -p tsconfig.json --type-check"
   },
   "dependencies": {
+    "dotenv": "^4.0.0",
     "source-map-support": "^0.4.15"
   },
   "devDependencies": {
+    "@types/dotenv": "^4.0.0",
     "@types/node": "^7.0.31",
     "@types/source-map-support": "^0.4.0",
     "nodemon": "^1.11.0",

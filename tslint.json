@@ -5,7 +5,7 @@
     },
     "rules": {
         "adjacent-overload-signatures": true,
-        "await-promise": true,
+        "await-promise": [true, "RequestPromise"],
         "class-name": true,
         "comment-format": [true, "check-space"],
         "curly": true,
@@ -32,7 +32,7 @@
             ]
         }],
         "no-consecutive-blank-lines": true,
-        "no-floating-promises": true,
+        "no-floating-promises": [true, "RequestPromise"],
         "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
         "no-trailing-whitespace": true,
         "no-var-keyword": true,

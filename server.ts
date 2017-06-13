@@ -26,12 +26,29 @@ export interface AppConfig {
      * GitHub webhook secret.
      */
     githubWebhookSecret: string;
+
+    /**
+     * GitHub App Id.
+     */
+    githubAppId: number;
+
+    /**
+     * GitHub App PEM-encoded private key.
+     */
+    githubAppPrivateKey: string;
+
+    /**
+     * Installation Id of the installation in the se-edu organization.
+     */
+    githubInstallationId: number;
 }
 
 /**
  * Creates a Koa Application with the provided `appConfig`.
  */
 export function createApp(appConfig: AppConfig): Koa {
+    const userAgent = 'se-edu-bot';
+
     const app = new Koa();
     app.proxy = appConfig.proxy;
 
@@ -42,6 +59,16 @@ export function createApp(appConfig: AppConfig): Koa {
     app.use(koaRoute.post('/webhook', koaCompose<Koa.Context>([
         koaBodyParser(),
         github.koaWebhookValidator(appConfig.githubWebhookSecret),
+        github.koaGhAppApi({
+            appId: appConfig.githubAppId,
+            expiresIn: 60,
+            privateKey: appConfig.githubAppPrivateKey,
+            userAgent,
+        }),
+        github.koaGhInstallationApi({
+            installationId: appConfig.githubInstallationId,
+            userAgent,
+        }),
         logic.webhookMiddleware,
     ])));
 
@@ -57,6 +84,9 @@ export function createApp(appConfig: AppConfig): Koa {
  */
 function extractAppConfigFromEnv(): AppConfig {
     return {
+        githubAppId: parseInt(extractEnvVar('GITHUB_APP_ID'), 10),
+        githubAppPrivateKey: extractEnvVar('GITHUB_APP_PRIVATE_KEY'),
+        githubInstallationId: parseInt(extractEnvVar('GITHUB_INSTALLATION_ID'), 10),
         githubWebhookSecret: extractEnvVar('GITHUB_WEBHOOK_SECRET'),
         proxy: !!extractEnvVar('PROXY', ''),
     };

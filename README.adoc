@@ -46,6 +46,7 @@ Take note of it, we'll use it in later steps.
 
 === Setting up a GitHub App
 
+.Creating the GitHub App
 . Go to your https://github.com/settings/apps[User Owned GitHub Apps] page and click on `Register a new GitHub App`.
 . Fill in the details as follows:
   (replace `https://abc123.ngrok.io` with your temporary ngrok URL which you got in <<Setting up ngrok>>)
@@ -77,8 +78,20 @@ Take note of it, we'll use it in later steps.
     Ensure `Only on this account` is selected.
 
 . Click `Create GitHub App` to create your GitHub App.
-. You will then be taken to your GitHub App's page. Click on `Install`.
+. You will then be taken to your GitHub App's page.
+  This page will show your GitHub App's ID.
+  You will need to set it as the `GITHUB_APP_ID` in the <<Environment variables>>.
+. You will also need to generate a private key for the GitHub App.
+  Click on `Generate private key`, and save the file to a known location.
+  You will need its contents for setting the `GITHUB_APP_PRIVATE_KEY` in the <<Environment variables>>.
+
+.Installing the GitHub App
+. Next, we will need to install the GitHub App. Click on `Install`.
 . Select `All repositories` and then click `Install` to install your GitHub App on all your GitHub repositories.
+. You will be taken to the installation page which has the URL with the format
+  `https://github.com/settings/installations/INSTALLATION_ID`,
+  where `INSTALLATION_ID` is the installation ID number.
+  You will need to set it as the `GITHUB_INSTALLATION_ID` in the <<Environment variables>>.
 
 NOTE: Since your ngrok URL is temporary,
 you will need to reconfigure your GitHub App each time you get a new temporary URL.
@@ -211,6 +224,18 @@ as Heroku will automatically set the `PORT` environment variable.
 
 `GITHUB_WEBHOOK_SECRET`::
 (Required) The webhook secret of the GitHub App. (See <<Setting up a GitHub App>>)
+
+`GITHUB_APP_ID`::
+(Required) The GitHub App ID. (See <<Setting up a GitHub App>>)
+
+`GITHUB_APP_PRIVATE_KEY`::
+(Required) The *full* contents of the GitHub App private key file.
+Newlines must be preserved.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_INSTALLATION_ID`::
+(Required) The installation ID of the GitHub App.
+(See <<Setting up a GitHub App>>)
 
 == Architecture
 

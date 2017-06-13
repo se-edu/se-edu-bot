@@ -14,6 +14,9 @@ export class CreateAppTest {
     @test
     'works'(): void {
         createApp({
+            githubAppId: 123,
+            githubAppPrivateKey: '',
+            githubInstallationId: 123,
             githubWebhookSecret: 'abcd123',
             proxy: false,
         });

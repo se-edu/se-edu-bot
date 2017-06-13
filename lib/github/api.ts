@@ -10,6 +10,7 @@ export const baseUrl = 'https://api.github.com/';
  * Accept header sent to the GitHub API.
  */
 export const acceptHeader = [
+    'application/vnd.github.machine-man-preview+json',
     'application/json',
 ].join(' ');
 

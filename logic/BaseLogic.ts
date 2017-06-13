@@ -6,15 +6,17 @@ import Koa = require('koa');
  * Useful {@link Logic} base class.
  */
 export default class BaseLogic implements Logic {
-    async onPing(event: github.PingEvent): Promise<void> {
+    async onPing(event: github.PingEvent, ghInstallationApi: github.RequestApi): Promise<void> {
         // do nothing
     }
 
     async webhookMiddleware(ctx: Koa.Context, next?: () => Promise<void>): Promise<void> {
         const event = ctx.request.body;
+        const ghInstallationApi = github.requireGhInstallationApi(ctx);
+
         switch (github.getEventName(ctx)) {
         case 'ping':
-            this.onPing(event).catch(onError);
+            this.onPing(event, ghInstallationApi).catch(onError);
             break;
         default:
         }

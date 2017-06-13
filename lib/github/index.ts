@@ -16,3 +16,12 @@ export {
     createApi,
     createAppApi,
 } from './api';
+export {
+    GhAppApiCtx,
+    GhInstallationApiCtx,
+    KoaGhInstallationApiOptions,
+    koaGhAppApi,
+    koaGhInstallationApi,
+    requireGhAppApi,
+    requireGhInstallationApi,
+} from './koaGhApi';

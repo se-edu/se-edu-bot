@@ -26,3 +26,6 @@ export {
     requireGhAppApi,
     requireGhInstallationApi,
 } from './koaGhApi';
+export {
+    forEachPage,
+} from './pagination';

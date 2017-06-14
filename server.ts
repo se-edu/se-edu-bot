@@ -100,6 +100,7 @@ export function createApp(appConfig: AppConfig): Koa {
         fileName: logFileName,
     });
     app.use(koaRoute.get('/logs', koaCompose<Koa.Context>([
+        auth.createAccessControlByInstallationId(appConfig.githubInstallationId),
         async ctx => {
             ctx.type = 'text';
             ctx.body = logger.createReadableStream();

@@ -3,6 +3,7 @@ import koaCompose = require('koa-compose');
 import koaRoute = require('koa-route');
 import simpleOauth2 = require('simple-oauth2');
 import createError = require('http-errors');
+import * as github from '../lib/github';
 
 /**
  * Options to pass to {@link Auth}.
@@ -59,6 +60,44 @@ export class Auth {
         ]);
     }
 
+    createAccessControlByInstallationId(installationId: number): Koa.Middleware {
+        return async (ctx: Koa.Context, next?: () => Promise<void>): Promise<void> => {
+            const ghUserApi = this.getGhUserApi(ctx);
+            if (!ghUserApi) {
+                ctx.redirect(this.getLoginRedirect(ctx));
+                return;
+            }
+
+            // Check that the user has access to our installation
+            const installationIds: number[] = [];
+            await github.forEachPage(ghUserApi, {
+                url: 'user/installations',
+            }, body => {
+                const installations: any[] = body.installations;
+                installations.forEach(installation => installationIds.push(installation.id));
+            });
+
+            if (!installationIds.includes(installationId)) {
+                throw createError(403, 'User is not authorized to access this page');
+            }
+
+            if (next) {
+                await next();
+            }
+        };
+    }
+
+    private getGhUserApi(ctx: Koa.Context): github.RequestApi | undefined {
+        const accessToken = ctx.cookies.get(this.accessTokenCookieName);
+        if (!accessToken) {
+            return;
+        }
+        return github.createAccessTokenApi({
+            accessToken,
+            userAgent: this.userAgent,
+        });
+    }
+
     private async loginMiddleware(ctx: Koa.Context): Promise<void> {
         const authorizationUri = this.oauth2.authorizationCode.authorizeURL({
             redirect_uri: this.getOauthRedirectUri(ctx),
@@ -111,6 +150,11 @@ export class Auth {
             return this.defaultRedirect;
         }
         return redirect;
+    }
+
+    private getLoginRedirect(ctx: Koa.Context): string {
+        const redirect = `${ctx.path}${ctx.search}`;
+        return `${this.loginRoute}?redirect=${encodeURIComponent(redirect)}`;
     }
 }
 

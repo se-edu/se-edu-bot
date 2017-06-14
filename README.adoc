@@ -274,6 +274,8 @@ which provides some useful base functionality such as splitting the `webhookMidd
 To facilitate debugging problems in production,
 se-edu-bot exposes its logs via the `/logs` endpoint.
 
+You need to be a member of the `se-edu` organization in order to access them.
+
 == Coding standard
 
 We follow the oss-generic coding standard.

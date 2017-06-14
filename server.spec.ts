@@ -16,6 +16,8 @@ export class CreateAppTest {
         createApp({
             githubAppId: 123,
             githubAppPrivateKey: '',
+            githubClientId: 'abc',
+            githubClientSecret: 'abc',
             githubInstallationId: 123,
             githubWebhookSecret: 'abcd123',
             proxy: false,

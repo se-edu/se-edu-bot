@@ -34,6 +34,7 @@
     "request": "^2.81.0",
     "request-promise-native": "^1.0.4",
     "rotating-file-stream": "^1.2.2",
+    "simple-oauth2": "^1.2.0",
     "source-map-support": "^0.4.15",
     "typescript-string-enums": "^0.3.4"
   },
@@ -49,6 +50,7 @@
     "@types/nock": "^8.2.1",
     "@types/node": "^7.0.31",
     "@types/request-promise-native": "^1.0.5",
+    "@types/simple-oauth2": "^1.0.2",
     "@types/source-map-support": "^0.4.0",
     "mocha": "^3.4.2",
     "mocha-typescript": "^1.1.4",

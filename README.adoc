@@ -81,6 +81,10 @@ Take note of it, we'll use it in later steps.
 . You will then be taken to your GitHub App's page.
   This page will show your GitHub App's ID.
   You will need to set it as the `GITHUB_APP_ID` in the <<Environment variables>>.
++
+This page will also show the OAuth client ID and secret of your GitHub App.
+You will need to set it as the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` respectively in the <<Environment variables>>.
+
 . You will also need to generate a private key for the GitHub App.
   Click on `Generate private key`, and save the file to a known location.
   You will need its contents for setting the `GITHUB_APP_PRIVATE_KEY` in the <<Environment variables>>.
@@ -235,6 +239,14 @@ Newlines must be preserved.
 
 `GITHUB_INSTALLATION_ID`::
 (Required) The installation ID of the GitHub App.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_CLIENT_ID`::
+(Required) The OAuth Client ID of the GitHub App.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_CLIENT_SECRET`::
+(Required) The OAuth Client secret of the GitHub App.
 (See <<Setting up a GitHub App>>)
 
 == Architecture

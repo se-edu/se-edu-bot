@@ -1,0 +1,298 @@
+= se-edu-bot
+:toc: preamble
+:toc-title:
+:sectnums:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+endif::[]
+ifdef::env-github,env-browser[:outfilesuffix: .adoc]
+
+Helps out with managing SE-EDU projects.
+
+== Local development setup
+
+=== Prerequisites
+
+. Node `7.9.0` or later.
+. An editor with Typescript language service support is strongly recommended.
+  (e.g. https://code.visualstudio.com/[VS Code])
+. https://ngrok.com/[ngrok]
+
+=== Cloning the repo
+
+. Fork this repo, and clone the fork to your computer.
+. `cd` into the project directory.
+. Run `npm install` to install dependencies.
+
+=== Setting up ngrok
+
+We use https://ngrok.com/[ngrok] to expose our local server to the internet for Webhook testing.
+Run
+
+----
+ngrok http 5000
+----
+
+You should see a line like this:
+
+----
+Forwarding   https://abcdefg123.ngrok.io -> localhost:5000
+----
+
+This is your temporary ngrok URL which exposes your local server to the internet.
+It is valid until the `ngrok` process terminates.
+Take note of it, we'll use it in later steps.
+
+=== Setting up a GitHub App
+
+.Creating the GitHub App
+. Go to your https://github.com/settings/apps[User Owned GitHub Apps] page and click on `Register a new GitHub App`.
+. Fill in the details as follows:
+  (replace `https://abc123.ngrok.io` with your temporary ngrok URL which you got in <<Setting up ngrok>>)
+
+    Github App Name::
+    Give a name to identify the bot (e.g. `se-edu-bot`)
+
+    Homepage URL::
+    The URL to your fork.
+
+    User authorization callback URL::
+    `https://abc123.ngrok.io/auth/login/callback`
+
+    Webhook URL::
+    `https://abc123.ngrok.io/webhook`
+
+    Webhook Secret::
+    Fill in a random string (preferably generated with a cryptographically secure random string generator).
+    Take note of it, as you will need it later for setting `GITHUB_WEBHOOK_SECRET` in the <<Environment variables>>.
++
+NOTE: Yes, *any* random string.
+
+    Permissions::
+    Select the following, leaving the rest at their default:
+
+    * Issues: `Read & write`
+    ** Webhook events: `Issue comment`, `Issues`.
+    * Pull requests: `Read & write`
+    ** Webhook events: `Pull request`, `Pull request review`, `Pull request review comment`
+
+    Where can this app be installed?::
+    Ensure `Only on this account` is selected.
+
+. Click `Create GitHub App` to create your GitHub App.
+. You will then be taken to your GitHub App's page.
+  This page will show your GitHub App's ID.
+  You will need to set it later as the `GITHUB_APP_ID` in the <<Environment variables>>.
++
+This page will also show the OAuth client ID and secret of your GitHub App.
+You will need to set it later as the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` respectively in the <<Environment variables>>.
+
+. You will also need to generate a private key for the GitHub App.
+  Click on `Generate private key`, and save the file to a known location.
+  You will need its *full* contents later for setting the `GITHUB_APP_PRIVATE_KEY` in the <<Environment variables>>.
+
+.Installing the GitHub App
+. Next, we will need to install the GitHub App. Click on `Install`.
+. Select `All repositories` and then click `Install` to install your GitHub App on all your GitHub repositories.
+. You will be taken to the installation page which has the URL with the format
+  `https://github.com/settings/installations/INSTALLATION_ID`
+  (or `https://github.com/organizations/ORGANIZATION_NAME/settings/installations/INSTALLATION_ID` for organizations)
+  where `INSTALLATION_ID` is the installation ID number.
+  You will need to set it later as the `GITHUB_INSTALLATION_ID` in the <<Environment variables>>.
+
+NOTE: Since your ngrok URL is temporary,
+you will need to reconfigure your GitHub App each time you get a new temporary URL.
+(Not applicable for herokuapp URLs)
+
+=== Configuring environment variables
+
+Environment variables are used to configure the bot.
+See <<Environment variables>> for a full list of settings.
+
+For ease of development,
+se-edu-bot will automatically load environment variables defined in the `.env` file in the project root.
+
+This is done using https://github.com/motdotla/dotenv[dotenv].
+See the aforementioned link for information on the `.env` file format.
+
+=== Building the project
+
+* Build the project once.
++
+[source,shell]
+----
+npm run build
+----
+
+* Do a clean build.
++
+[source,shell]
+----
+npm run all clean build
+----
+
+=== Running the server
+
+The project must be built first (`npm run build`).
+
+* Run the server
++
+[source,shell]
+----
+npm start
+----
+
+* Run the server and watch for changes,
+  incrementally rebuilding the project and restarting the server whenever source files change.
++
+[source,shell]
+----
+npm run watch
+----
+
+The server should be accessible via your ngrok address which you got in <<Setting up ngrok>>.
+
+=== Linting
+
+[source,shell]
+----
+npm run lint
+----
+
+=== Running tests
+
+The project must be built first (`npm run build`).
+
+* Run tests once.
++
+[source,shell]
+----
+npm test
+----
+
+* Run tests and watch for changes,
+  incrementally rebuilding the project and re-running tests whenever source files change.
++
+[source,shell]
+----
+npm run test-watch
+----
+
+=== Cleaning build products
+
+[source,shell]
+----
+npm run clean
+----
+
+== Deploying to Heroku
+
+This repository is setup to automatically deploy to Heroku whenever new commits are pushed to `master`.
+As such, there is no need for any manual deployment.
+
+Below is a guide for setting up the Heroku application from scratch should there be any need to (e.g. for testing).
+
+=== Setting up the Heroku application from scratch
+
+.Part 1: Set up Heroku App
+. Go to the https://dashboard.heroku.com[Heroku dashboard] and login.
+. `New` -> `Create new App`.
+. Enter the app name (i.e. `se-edu-bot`) and click `Create App`.
+. Under `Deployment method`, select `Github`.
+. If Heroku Dashboard does not have access to your GitHub account,
+  it will display a single `Connect to GitHub` button.
+  Click on it, and then authorize the Heroku Dashboard to access your GitHub account and `se-edu` organization.
+. Follow the instructions to connect the Heroku app to the `se-edu/se-edu-bot` repo.
+. Ensure the `Wait for CI to pass before deploy` checkbox is checked, and then click `Enable Automatic Deploys`.
+
+.Part 2: Set up GitHub App
+. On GitHub, go to https://github.com/settings/profile[Your profile page] -> Organization Settings -> `se-edu`.
+. Click on `Github Apps`.
+. Click on `Register a new GitHub App`
+. Follow the same steps as <<Setting up a GitHub App>>,
+  except instead of using the `ngrok.io` hostname use the Heroku App's hostname (e.g. `https://se-edu-bot.herokuapp.com`)
+
+.Part 3: Continue setting up Heroku App
+. Go back to the https://dashboard.heroku.com[Heroku dashboard] and click on the `se-edu-bot` app to go to its page.
+. Go to `Settings` -> `Config Variables`, and set `NPM_CONFIG_PRODUCTION` to `false`.
+. Configure the rest of the <<Environment variables>>.
++
+WARNING: Make sure you set *all* required environment variables!
+
+. Next, to complete setting up the Heroku App, go back to the `Deploy` tab.
+  Look for `Manual deploy`, ensure the `master` branch is selected and then click `Deploy`.
+. Hopefully, the deployment is successful.
+  Visit the Heroku App's URL (e.g. `https://se-edu-bot.herokuapp.com`) and it should show `Hello world!`,
+  indicating that the app was successfully set up.
+
+== Environment variables
+
+`PROXY`::
+(Required) Set to `true` if se-edu-bot is served behind a reverse proxy (e.g. ngrok or heroku).
+Given that we host se-edu-bot on heroku and use ngrok for development,
+this should usually be set to `true`.
+
+`PORT`::
+TCP port which the server will listen on.
+There is no need to explicitly set this on Heroku,
+as Heroku will automatically set the `PORT` environment variable.
+(Default: 5000)
+
+`GITHUB_WEBHOOK_SECRET`::
+(Required) The webhook secret of the GitHub App. (See <<Setting up a GitHub App>>)
+
+`GITHUB_APP_ID`::
+(Required) The GitHub App ID. (See <<Setting up a GitHub App>>)
+
+`GITHUB_APP_PRIVATE_KEY`::
+(Required) The *full* contents of the GitHub App private key file.
+Newlines must be preserved.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_INSTALLATION_ID`::
+(Required) The installation ID of the GitHub App.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_CLIENT_ID`::
+(Required) The OAuth Client ID of the GitHub App.
+(See <<Setting up a GitHub App>>)
+
+`GITHUB_CLIENT_SECRET`::
+(Required) The OAuth Client secret of the GitHub App.
+(See <<Setting up a GitHub App>>)
+
+== Architecture
+
+`lib/`::
+    Utility libraries.
+    Try to avoid encoding policy within the code,
+    instead pass options to them via the entry point (`server.ts`).
+
+`logic/`::
+    Code controlling the behavior of the bot.
+
+=== `logic`
+
+The bot's behavior is split into multiple logic components,
+each doing one thing.
+Each logic component is implemented as an individual file within the `logic/` directory.
+
+All logic components implement the `Logic` interface.
+Most logic components also inherit from the `BaseLogic` class,
+which provides some useful base functionality such as splitting the `webhookMiddleware()` method into event-specific callback methods.
+
+== Logging
+
+To facilitate debugging problems in production,
+se-edu-bot exposes its logs via the `/logs` endpoint.
+
+You need to be a member of the `se-edu` organization in order to access them.
+
+== Coding standard
+
+We follow the oss-generic coding standard.
+
+== License
+
+MIT License

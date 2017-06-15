@@ -65,6 +65,9 @@ Take note of it, we'll use it in later steps.
 
     Webhook Secret::
     Fill in a random string (preferably generated with a cryptographically secure random string generator).
+    Take note of it, as you will need it later for setting `GITHUB_WEBHOOK_SECRET` in the <<Environment variables>>.
++
+NOTE: Yes, *any* random string.
 
     Permissions::
     Select the following, leaving the rest at their default:
@@ -80,25 +83,27 @@ Take note of it, we'll use it in later steps.
 . Click `Create GitHub App` to create your GitHub App.
 . You will then be taken to your GitHub App's page.
   This page will show your GitHub App's ID.
-  You will need to set it as the `GITHUB_APP_ID` in the <<Environment variables>>.
+  You will need to set it later as the `GITHUB_APP_ID` in the <<Environment variables>>.
 +
 This page will also show the OAuth client ID and secret of your GitHub App.
-You will need to set it as the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` respectively in the <<Environment variables>>.
+You will need to set it later as the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` respectively in the <<Environment variables>>.
 
 . You will also need to generate a private key for the GitHub App.
   Click on `Generate private key`, and save the file to a known location.
-  You will need its contents for setting the `GITHUB_APP_PRIVATE_KEY` in the <<Environment variables>>.
+  You will need its *full* contents later for setting the `GITHUB_APP_PRIVATE_KEY` in the <<Environment variables>>.
 
 .Installing the GitHub App
 . Next, we will need to install the GitHub App. Click on `Install`.
 . Select `All repositories` and then click `Install` to install your GitHub App on all your GitHub repositories.
 . You will be taken to the installation page which has the URL with the format
-  `https://github.com/settings/installations/INSTALLATION_ID`,
+  `https://github.com/settings/installations/INSTALLATION_ID`
+  (or `https://github.com/organizations/ORGANIZATION_NAME/settings/installations/INSTALLATION_ID` for organizations)
   where `INSTALLATION_ID` is the installation ID number.
-  You will need to set it as the `GITHUB_INSTALLATION_ID` in the <<Environment variables>>.
+  You will need to set it later as the `GITHUB_INSTALLATION_ID` in the <<Environment variables>>.
 
 NOTE: Since your ngrok URL is temporary,
 you will need to reconfigure your GitHub App each time you get a new temporary URL.
+(Not applicable for herokuapp URLs)
 
 === Configuring environment variables
 
@@ -212,6 +217,14 @@ Below is a guide for setting up the Heroku application from scratch should there
 . Go back to the https://dashboard.heroku.com[Heroku dashboard] and click on the `se-edu-bot` app to go to its page.
 . Go to `Settings` -> `Config Variables`, and set `NPM_CONFIG_PRODUCTION` to `false`.
 . Configure the rest of the <<Environment variables>>.
++
+WARNING: Make sure you set *all* required environment variables!
+
+. Next, to complete setting up the Heroku App, go back to the `Deploy` tab.
+  Look for `Manual deploy`, ensure the `master` branch is selected and then click `Deploy`.
+. Hopefully, the deployment is successful.
+  Visit the Heroku App's URL (e.g. `https://se-edu-bot.herokuapp.com`) and it should show `Hello world!`,
+  indicating that the app was successfully set up.
 
 == Environment variables
 
